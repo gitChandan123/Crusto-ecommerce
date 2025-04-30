@@ -6,10 +6,11 @@ __pycache__/
 # Virtual environment
 venv/
 .venv/
+*.env
 
 # Django SQLite database
 db.sqlite3
-
+.vscode
 # Media files
 media/
 

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Google Maps Integration</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=initMap" async defer></script>
+    <script>
+        function initMap() {
+            var location = {lat: 28.7041, lng: 77.1025};  // Default: New Delhi
+            var map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 10,
+                center: location
+            });
+            var marker = new google.maps.Marker({
+                position: location,
+                map: map
+            });
+        }
+    </script>
+</head>
+<body>
+    <h2>Google Map</h2>
+    <div id="map" style="height: 500px; width: 100%;"></div>
+</body>
+</html>

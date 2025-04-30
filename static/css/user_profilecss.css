@@ -1,0 +1,63 @@
+body {
+  background-color: #201148; /* Dark purple background */
+  color: #f8f9fa; /* White text color */
+  font-family: "Arial", sans-serif;
+}
+
+.profile-card {
+  background-color: #2f1d56; /* Slightly darker shade for the card */
+  border-radius: 50px; /* Increased border-radius for a softer look */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  padding: 60px; /* Increased padding for a bigger card */
+  margin-top: 20px auto; /* Adjusted margin for better spacing */
+  width: 200%; /* Set a wider width for the card */
+  max-width: 700px; /* Ensure it doesn't get too wide on larger screens */
+}
+
+.btn-custom {
+  background-color: #6c63ff; /* Lighter purple color for buttons */
+  color: white;
+  border-radius: 5px;
+  padding: 10px 15px; /* Larger buttons */
+  font-size: 1.2rem; /* Increased font size */
+}
+
+.btn-custom:hover {
+  background-color: #5148d3; /* Darker shade on hover */
+}
+
+.btn-outline-secondary {
+  color: #fff;
+  border-color: #6c757d;
+  padding: 10px 15px; /* Larger buttons */
+  font-size: 1.2rem; /* Increased font size */
+}
+
+.btn-outline-secondary:hover {
+  background-color: #495057;
+  border-color: #6c757d;
+}
+
+.list-unstyled li {
+  padding: 12px 0; /* Increased padding between items */
+  font-size: 1.2rem; /* Increased font size for better readability */
+  color: #ffffff; /* Ensuring dynamic content is readable */
+}
+
+.card-header {
+  background-color: #2a1847; /* Darker shade for the header */
+  color: #ffffff;
+  font-size: 2rem; /* Increased font size for the header */
+  font-weight: 700;
+  padding: 25px; /* More padding for a larger header */
+}
+
+.profile-header {
+  color: #b1a7d1; /* Lighter shade for the email */
+  font-size: 1.5rem; /* Larger email text */
+}
+
+.profile-info {
+  font-weight: bold;
+  color: #ffffff; /* Ensure info is visible */
+}

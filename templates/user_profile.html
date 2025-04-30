@@ -1,0 +1,58 @@
+
+{% extends "base.html" %} {% load static %}
+<link rel="shortcut icon" href="{% static 'images/favicon.png' %}" />
+{% block class %}class="sub_page"{% endblock class %} 
+{% block menu_status%}active{% endblock menu_status %} {% block main %}
+ <!-- Include Bootstrap and Bootstrap Icons -->
+<head>
+      <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+      <script src="{% static 'js/bootstrap.js' %}"></script>
+      <script src="{% static 'js/custom.js' %}"></script>
+    <script src="{% static 'js/csrf_token.js' %}"></script>
+<script src="{% static 'js/login_model.js' %}"></script>
+    </head>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+
+<link rel="stylesheet" href="{% static 'css/user_profilecss.css' %}">
+
+<!-- Profile Template -->
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card profile-card text-center">
+                <!-- Profile Header -->
+                <div class="card-header text-center">
+                    <h3> Welcome {{ user.username }}</h3>
+                    <p class="profile-header">{{ user.email }}</p>
+                </div>
+
+                <!-- Profile Details -->
+                <div class="text-start my-4">
+                    <h5>Profile Information</h5>
+                    <ul class="list-unstyled">
+                        <li><strong class="profile-info">Joined Date:</strong> {{ user.date_joined|date:"F j, Y" }}</li>
+                        <li><strong class="profile-info">Membership:</strong> Premium</li>
+                        <li><strong class="profile-info">Orders:</strong> 25</li>
+                        <li><strong class="profile-info">Address:</strong> Vill+Post-Sanahpur,DBG</li>
+                    </ul>
+                </div>
+
+                <!-- Buttons -->
+                <div>
+                    <a href="#" class="btn btn-custom me-2">Edit Profile</a>
+                    <a href={% url 'cart' %} class="btn btn-outline-secondary">View Orders</a>
+                    <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-custom me-2">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+{% endblock main %}

@@ -1,0 +1,102 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block home_status %}active{%endblock home_status %} 
+{% block class %}class="sub_page"{% endblock class %} 
+{%block main %}
+<script src="{% static 'js/csrf_token.js' %}"></script>
+<script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.js' %}"></script>
+<script src="{% static 'js/custom.js' %}"></script>
+<script src="{% static 'js/login_model.js' %}"></script>
+
+<!-- Search Results Section -->
+<section class="food_section layout_padding-bottom">
+  <div class="container">
+    <div class="heading_container heading_center">
+      <h2>Search Results for "{{ query }}"</h2>
+    </div>
+
+    {% if results %}
+    <div class="filters-content">
+      <div class="row grid">
+        {% for result in results %}
+        <div class="col-sm-6 col-lg-4 all {{ result.Category|slugify }}">
+          <a href="{% url 'item_details' result.id %}" class="box-link">
+            <div class="box">
+              <div>
+                <div class="img-box">
+                  <img src="{{ result.Image }}" alt="{{ result.Image }}" />
+                </div>
+                <div class="detail-box">
+                  <h5>{{ result.Item_name }}</h5>
+                  <p>{{ result.description }}</p>
+                  <div class="options">
+                    <h6>${{ result.price }}</h6>
+                    {% if user.is_authenticated %}
+                    <a
+                      href="javascript:void(0);"
+                      class="add-to-cart"
+                      data-item-id="{{ result.id }}"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 456.029 456.029"
+                      >
+                        <path
+                          d="M345.6,338.862c-29.184,0-53.248,23.552-53.248,53.248s24.064,53.248,53.248,53.248
+                        s53.248-23.552,53.248-53.248S374.784,338.862,345.6,338.862z"
+                        />
+                        <path
+                          d="M439.296,84.91H112.64l-5.12-34.304C104.448,27.566,84.992,10.67,61.952,10.67H20.48
+                        C9.216,10.67,0,19.886,0,31.15s9.216,20.48,20.48,20.48h41.472l31.744,216.064c4.096,27.136,27.648,47.616,55.296,47.616
+                        h212.992c26.624,0,49.664-18.944,55.296-45.056l33.28-166.4C457.728,97.71,450.56,86.958,439.296,84.91z"
+                        />
+                      </svg>
+                    </a>
+                    {% else %}
+                    <a href="{% url 'User_Login' %}" class="btn btn-secondary"
+                      >+</a
+                    >
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+          <style>
+            /* Prevent the link from affecting text styles */
+            a.box-link {
+              text-decoration: none; /* Remove underline */
+              color: inherit; /* Inherit the color from parent element */
+            }
+
+            a.box-link h5,
+            a.box-link p,
+            a.box-link h6 {
+              color: inherit; /* Ensure text color stays the same */
+            }
+
+            a.box-link:hover {
+              text-decoration: none; /* Prevent underline on hover */
+              color: inherit; /* Ensure hover color stays the same */
+            }
+          </style>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% else %}
+    <div class="text-center mt-4">
+      <h5>No results found for "{{ query }}".</h5>
+      <a href="{% url 'Menu' %}" class="btn btn-primary mt-3">Back to Menu</a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+<script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.js' %}"></script>
+<script src="{% static 'js/custom.js' %}"></script>
+<script src="{% static 'js/csrf_token.js' %}"></script>
+
+
+{% endblock main %}

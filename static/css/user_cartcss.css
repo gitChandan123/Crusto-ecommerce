@@ -1,0 +1,93 @@
+body {
+  background-color: #201148; /* Dark purple background */
+  color: #f8f9fa; /* White text color */
+  font-family: "Arial", sans-serif;
+}
+
+.card {
+  background-color: #2f1d56; /* Slightly darker shade for the card */
+  border: 1px solid #495057;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  margin-top: 20px;
+}
+
+.card-header {
+  background-color: #2a1847; /* Darker shade for the header */
+  color: #ffffff;
+  font-size: 1.75rem;
+  font-weight: 600;
+  padding: 15px;
+}
+
+.table-dark,
+.table-dark th,
+.table-dark td {
+  background-color: #495057;
+  color: #f8f9fa;
+}
+
+.btn-custom {
+  background-color: #6c63ff; /* Lighter purple color for buttons */
+  color: white;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 1rem;
+}
+
+.btn-custom:hover {
+  background-color: #5148d3; /* Darker shade on hover */
+}
+
+.btn-outline-secondary {
+  color: #fff;
+  border-color: #6c757d;
+  padding: 10px 20px;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #495057;
+  border-color: #6c757d;
+}
+
+.alert {
+  background-color: #d63384;
+  color: white;
+}
+
+.profile-header {
+  color: #b1a7d1; /* Lighter shade for the email */
+  font-size: 1.2rem;
+}
+
+.list-unstyled li {
+  padding: 8px 0;
+  font-size: 1.1rem;
+  color: #ffffff; /* Ensuring dynamic content is readable */
+}
+
+.img-thumbnail {
+  border: 1px solid #343a40;
+  width: 150px; /* Increased width */
+  height: 150px; /* Increased height */
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.font-weight-bold {
+  font-weight: bold;
+}
+
+.table th,
+.table td {
+  vertical-align: middle;
+}
+
+.profile-info {
+  font-weight: bold;
+  color: #ffffff; /* Ensure info is visible */
+}
+
+.btn-lg {
+  font-size: 1.25rem;
+}

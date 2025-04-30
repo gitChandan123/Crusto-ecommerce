@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block home_status %}active{% endblock home_status %}
+{% block class %}class="sub_page"{% endblock class %}
+
+{% block main %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card shadow-lg p-5 rounded" style="max-width: 500px; width: 100%; background-color: #f8f9fa;">
+        <div class="card-body text-center">
+            <div class="mb-4">
+                <h1 class="text-success display-4">✅</h1>
+            </div>
+            <h2 class="text-success mb-3">Booking Confirmed!</h2>
+            <p class="text-muted mb-4">Thank you for reserving a table with us. We’ll contact you shortly!</p>
+            <a href="{% url 'Home' %}" class="btn btn-primary btn-lg rounded-pill">
+                <i class="bi bi-house-door"></i> Back to Home
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

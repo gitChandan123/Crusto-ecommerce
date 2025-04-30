@@ -1,0 +1,409 @@
+{% extends 'base.html' %}
+{% load static %} 
+{% block home_status %}active{%endblock home_status %} 
+{% block class %}class="sub_page"{% endblock class %} 
+{%block main %}
+<meta name="csrf-token" content="{{ csrf_token }}" />
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <div class="card shadow-lg border-0 rounded-lg p-4">
+        <div class="row">
+          <!-- Product Image -->
+          <div class="col-md-6">
+            <img
+              src="/media/{{ item.Image }}"
+              class="img-fluid rounded shadow-sm"
+              alt="{{ item.Item_name }}"
+            />
+          </div>
+
+          <!-- Product Details -->
+          <div class="col-md-6">
+            <div class="text-center">
+              <h2 class="fw-bold text-dark">{{ item.Item_name }}</h2>
+              <p class="text-warning mb-1">
+                ⭐⭐⭐⭐⭐ <span class="text-muted">(4.8/5 - 150 Reviews)</span>
+              </p>
+              <p class="card-text text-muted">{{ item.description }}</p>
+              <h3 class="text-success fw-bold mt-2">${{ item.price }}</h3>
+
+              <div class="d-flex justify-content-center gap-3 mt-3">
+                {% if user.is_authenticated %}
+                <a
+                  href="javascript:void(0)"
+                  class="btn btn-primary px-4 py-2 add-to-cart"
+                  data-item-id="{{ item.id }}"
+                >
+                  <i class="fas fa-shopping-cart"></i> Add to Cart
+                </a>
+                <a
+                  href="{% url 'buy_now' item.id %}"
+                  class="btn btn-danger px-4 py-2 buy-now"
+                  data-item-id="{{ item.id }}"
+                >
+                  <i class="fas fa-bolt"></i> Buy Now</a
+                >
+                {% else %}
+                <a
+                  href="{% url 'User_Login' %}"
+                  class="btn btn-warning px-4 py-2"
+                >
+                  <i class="fas fa-sign-in-alt"></i> Login to Buy
+                </a>
+                {% endif %}
+              </div>
+
+              <a href="{% url 'Menu' %}" class="btn btn-outline-secondary mt-3">
+                <i class="fas fa-arrow-left"></i> Back to Menu
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Toast Notification -->
+<div id="toast-container"></div>
+
+<script>
+    $(document).ready(function () {
+        $(".add-to-cart").click(function () {
+            let productId = $(this).attr("data-item-id");
+            let csrfToken = $('meta[name="csrf-token"]').attr("content");
+
+            $.ajax({
+                url: `/add-to-cart/${productId}/`,
+                method: "POST",
+                headers: { "X-CSRFToken": csrfToken },
+                success: function (data) {
+                    if (data.success) {
+                        showToastMessage(data.message);
+                    } else {
+                        showToastMessage("❌ " + data.message, "error");
+                    }
+                },
+                error: function () {
+                    showToastMessage("❌ Failed to add item!", "error");
+                }
+            });
+        });
+    });
+
+    function showToastMessage(message, type = "success") {
+        let toastContainer = $("#toast-container");
+        let toast = $("<div>")
+            .addClass("toast-message " + (type === "success" ? "toast-success" : "toast-error"))
+            .html(`<span class="toast-icon">${type === "success" ? "✅" : "❌"}</span> ${message}`);
+
+        toastContainer.append(toast);
+        setTimeout(() => toast.addClass("show"), 100);
+
+        setTimeout(() => {
+            toast.removeClass("show");
+            setTimeout(() => toast.remove(), 500);
+        }, 3000);
+    }
+</script>
+
+<style>
+    /* Toast Container */
+    #toast-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    /* Toast Message */
+    .toast-message {
+        background-color: #28a745;
+        color: white;
+        padding: 12px 18px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 250px;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        position: relative;
+        transform: translateX(100%);
+        transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+        opacity: 0;
+    }
+
+    /* Slide-in effect */
+    .toast-message.show {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    /* Error Toast */
+    .toast-error {
+        background-color: #dc3545;
+    }
+
+    /* Toast Icon */
+    .toast-icon {
+        font-size: 20px;
+    }
+</style>
+      <!-- Reviews Section -->
+      <div class="card mt-4 shadow-sm border-0">
+        <div class="card-body">
+          <h4 class="fw-bold mb-3">Customer Reviews</h4>
+
+          <!-- Review List -->
+          <div id="review-list">
+            {% for review in item.reviews.all %}
+            <div
+              class="review-item p-3 mb-3 border rounded shadow-sm"
+              id="review-{{ review.id }}"
+            >
+              <div class="d-flex align-items-center">
+                <strong class="me-2">{{ review.user.username }}</strong>
+                <span class="text-warning">⭐ {{ review.rating }}/5</span>
+              </div>
+              <p class="text-muted mb-1">{{ review.comment }}</p>
+              <small class="text-secondary"
+                >{{ review.created_at|date:"F j, Y" }}</small
+              >
+
+              <!-- Show edit and delete buttons only for the review owner -->
+              {% if request.user == review.user %}
+              <div class="mt-2">
+                <button
+                  class="btn btn-sm btn-outline-primary edit-review"
+                  data-review-id="{{ review.id }}"
+                  data-rating="{{ review.rating }}"
+                  data-comment="{{ review.comment }}"
+                >
+                  Edit
+                </button>
+                <button
+                  class="btn btn-sm btn-outline-danger delete-review"
+                  data-review-id="{{ review.id }}"
+                >
+                  Delete
+                </button>
+              </div>
+              {% endif %}
+            </div>
+            {% empty %}
+            <p class="text-muted">
+              No reviews yet. Be the first to review this item!
+            </p>
+            {% endfor %}
+          </div>
+
+          <!-- Add a Review Form -->
+          {% if user.is_authenticated %}
+          <form id="review-form" class="mt-4">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label class="form-label fw-bold">Rating:</label>
+              <select id="rating" class="form-select w-50">
+                <option value="5">⭐⭐⭐⭐⭐ - Excellent</option>
+                <option value="4">⭐⭐⭐⭐ - Very Good</option>
+                <option value="3">⭐⭐⭐ - Good</option>
+                <option value="2">⭐⭐ - Fair</option>
+                <option value="1">⭐ - Poor</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold">Your Review:</label>
+              <textarea
+                id="comment"
+                class="form-control"
+                rows="3"
+                placeholder="Write your thoughts here..."
+                required
+              ></textarea>
+            </div>
+            <button type="submit" class="btn btn-success w-100">
+              Submit Review
+            </button>
+          </form>
+          {% else %}
+          <p class="text-center mt-3">
+            <a
+              href="{% url 'User_Login' %}"
+              class="text-decoration-none fw-bold"
+              >Login to leave a review</a
+            >
+          </p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Custom CSS -->
+<style>
+  /* Adjust layout */
+  .card {
+    padding: 20px;
+  }
+
+  /* Review Section */
+  .review-item {
+    background: rgb(89, 137, 184) 110, 122;
+    border-radius: 10px;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .review-item:hover {
+    background: rgb(239, 242, 245);
+  }
+
+  /* Buttons */
+  .btn {
+    transition: all 0.3s ease-in-out;
+  }
+
+  .btn-primary:hover {
+    background-color: #0056b3;
+  }
+
+  .btn-danger:hover {
+    background-color: #dc3545;
+  }
+
+  .btn-outline-secondary:hover {
+    background-color: #6c757d;
+    color: white;
+  }
+</style>
+
+<script>
+  document
+    .getElementById("review-form")
+    .addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const rating = document.getElementById("rating").value;
+      const comment = document.getElementById("comment").value;
+      const csrfToken = document.querySelector(
+        "[name=csrfmiddlewaretoken]"
+      ).value;
+
+      fetch("{% url 'add_review' item.id %}", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrfToken,
+        },
+        body: JSON.stringify({ rating: rating, comment: comment }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            const reviewList = document.getElementById("review-list");
+            const newReview = document.createElement("div");
+            newReview.classList.add(
+              "review-item",
+              "p-3",
+              "mb-3",
+              "border",
+              "rounded",
+              "shadow-sm"
+            );
+            newReview.innerHTML = `
+              <div class="d-flex align-items-center">
+                <strong class="me-2">${data.username}</strong>  
+                <span class="text-warning">⭐ ${data.rating}/5</span>
+              </div>
+              <p class="text-muted mb-1">${data.comment}</p>
+              <small class="text-secondary">${data.created_at}</small>`;
+            reviewList.prepend(newReview);
+            document.getElementById("review-form").reset();
+          } else {
+            alert("Failed to submit review.");
+          }
+        });
+    });
+
+  document.querySelectorAll(".edit-review").forEach((button) => {
+    button.addEventListener("click", function () {
+      const reviewId = this.getAttribute("data-review-id");
+      const newRating = prompt(
+        "Enter new rating (1-5):",
+        this.getAttribute("data-rating")
+      );
+      const newComment = prompt(
+        "Edit your review:",
+        this.getAttribute("data-comment")
+      );
+
+      if (newRating && newComment) {
+        fetch(`/edit_review/${reviewId}/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]")
+              .value,
+          },
+          body: `rating=${newRating}&comment=${newComment}`,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              // Update the review in the DOM
+              const reviewElement = document.getElementById(
+                `review-${reviewId}`
+              );
+              reviewElement.querySelector(".review-rating").textContent =
+                data.rating;
+              reviewElement.querySelector(".review-comment").textContent =
+                data.comment;
+              reviewElement.querySelector("small").textContent =
+                data.created_at;
+            } else {
+              alert("Failed to edit review.");
+            }
+          });
+      }
+    });
+  });
+
+  // Delete review functionality
+  document.querySelectorAll(".delete-review").forEach((button) => {
+    button.addEventListener("click", function () {
+      const reviewId = this.getAttribute("data-review-id");
+      if (confirm("Are you sure you want to delete this review?")) {
+        fetch(`/delete_review/${reviewId}/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]")
+              .value,
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              // Remove the review from the DOM
+              const reviewElement = document.getElementById(
+                `review-${reviewId}`
+              );
+              reviewElement.remove();
+            } else {
+              alert("Failed to delete review.");
+            }
+          });
+      }
+    });
+  });
+</script>
+
+<script src="{% static 'js/csrf_token.js' %}"></script>
+<script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.js' %}"></script>
+<script src="{% static 'js/custom.js' %}"></script>
+<script src="{% static 'js/login_model.js' %}"></script>
+
+{% endblock main %}

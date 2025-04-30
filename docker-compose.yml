@@ -1,0 +1,28 @@
+version: "3.8" # Specify the Docker Compose version
+
+services:
+  postgres:
+    image: postgres:14
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres        # Database user
+      POSTGRES_PASSWORD: 12345       # Database password
+      POSTGRES_DB: myuserdb          # Initial database
+    ports:
+      - "5434:5432"                  # Host port 5433 maps to container port 5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Persistent volume for PostgreSQL data
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.2
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node   # Run as a single-node cluster
+      - xpack.security.enabled=false # Disable security for development
+    ports:
+      - "9200:9200"                  # Host port 9200 maps to container port 9200
+    volumes:
+      - ./elasticsearch/data:/usr/share/elasticsearch/data # Persistent volume for Elasticsearch data
+
+volumes:
+  postgres_data:                # Named volume for PostgreSQL data
